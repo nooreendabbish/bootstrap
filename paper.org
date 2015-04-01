@@ -1,0 +1,19 @@
+#+TITLE: 
+#+AUTHOR: Nooreen Dabbish and Daqian Huang
+#+OPTIONS: toc:nil
+
+\begin{abstract}
+
+\end{abstract}
+
+* Instructions
+Evaluation: You will be evaluated on the basis of BOTH the quality and clarity of in-class presentation and the final report. All the students of any group will get the SAME grade (depending on their contribution on the project). Before presentation you MUST TURN IN the printed final report to me.
+ 
+Format of the Report: Clear Title, Names of Teammates (and their individual contributions) and Abstract on the first page. Summary of the main idea in the remaining 3-4 pages. The LAST section of your report should discuss what are the possible ways you think this work could be further extended. Use Latex to prepare the manuscript. Clear reference list should be provided. While writing the manuscript your emphasize will be to summarize the main findings in your own words (do not copy paste). Presentation should be simple yet comprehensive. You are highly recommended to use numerical examples (when applicable) to better illustrate the ideas.
+ 
+Format of presentation: Board work. Use your manuscript while presenting. Time: 40 mins + 5-7 mins Q&A session. . Illustration using data set and case studies (while presenting your idea) is highly valuable.
+ 
+Start as soon as possible with your group members.
+ 
+This is a GREAT opportunity. Successful projects in the past have gone
+on to become full-fledged research papers !
