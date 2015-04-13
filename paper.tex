@@ -1,4 +1,4 @@
-% Created 2015-04-01 Wed 10:37
+% Created 2015-04-13 Mon 16:24
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -37,15 +37,131 @@
 \section{Instructions}
 \label{sec-1}
 
-Evaluation: You will be evaluated on the basis of BOTH the quality and clarity of in-class presentation and the final report. All the students of any group will get the SAME grade (depending on their contribution on the project). Before presentation you MUST TURN IN the printed final report to me.
+Evaluation: You will be evaluated on the basis of BOTH the quality and
+clarity of in-class presentation and the final report. All the
+students of any group will get the SAME grade (depending on their
+contribution on the project). Before presentation you MUST TURN IN the
+printed final report to me.
  
-Format of the Report: Clear Title, Names of Teammates (and their individual contributions) and Abstract on the first page. Summary of the main idea in the remaining 3-4 pages. The LAST section of your report should discuss what are the possible ways you think this work could be further extended. Use Latex to prepare the manuscript. Clear reference list should be provided. While writing the manuscript your emphasize will be to summarize the main findings in your own words (do not copy paste). Presentation should be simple yet comprehensive. You are highly recommended to use numerical examples (when applicable) to better illustrate the ideas.
+Format of the Report: Clear Title, Names of Teammates (and their
+individual contributions) and Abstract on the first page. Summary of
+the main idea in the remaining 3-4 pages. The LAST section of your
+report should discuss what are the possible ways you think this work
+could be further extended. Use Latex to prepare the manuscript. Clear
+reference list should be provided. While writing the manuscript your
+emphasize will be to summarize the main findings in your own words (do
+not copy paste). Presentation should be simple yet comprehensive. You
+are highly recommended to use numerical examples (when applicable) to
+better illustrate the ideas. 
  
-Format of presentation: Board work. Use your manuscript while presenting. Time: 40 mins + 5-7 mins Q\&A session. . Illustration using data set and case studies (while presenting your idea) is highly valuable.
+Format of presentation: Board work. Use your manuscript while
+presenting. Time: 40 mins + 5-7 mins Q\&A session. . Illustration using
+data set and case studies (while presenting your idea) is highly
+valuable. 
  
 Start as soon as possible with your group members.
  
 This is a GREAT opportunity. Successful projects in the past have gone
 on to become full-fledged research papers !
+\section{Recent Developments in Bootstrap Methodology}
+\label{sec-2}
+\subsection{Introduction}
+\label{sec-2-1}
+
+ 
+This article sets out to ``give a bird's eye overview of the current
+state of bootstrap research.'' The authors cover basic ideas with
+references to bootstrap literature as well as giving in-depth
+explanation and examples of extensions. Topics include parametric
+inference using bootstrap stimulations, non-uniform nonparametric
+sampling, bootstrap failure, hypothesis testing, bagging, dependent
+data and other topics. Our goal is to summarize and highlight the
+examples and ideas in the paper, and we conclude with a section on
+future directions suggesting what next steps can take this work further.
+\subsection{Basic Ideas: Bootstrap approaches to confiendence intervals and hypothesis testing}
+\label{sec-2-2}
+
+ 
+\begin{itemize}
+\item Nonparametric confidence intervals
+\begin{itemize}
+\item either Studentized pivots or direct use of quantiles
+\item Studentized bootstrap uses estimated var V$^{\star}$ are second-order accurace 1-$\alpha$+O(n$^{\mathrm{-1}}$)
+\item improvement over O(n$^{\mathrm{-1/2}}$)
+\item BC$_a$ also second-order but additionally tranformation-invariant.
+\end{itemize}
+\item Using a pivot
+\begin{itemize}
+\item avoids the need to modify the samping plan in hypothesis testing
+\end{itemize}
+\item Model-based bootstrapping
+\begin{itemize}
+\item when data are not identically distributed.
+\item time-series/autoregressive moving average
+\item Notes on Notation:
+\begin{itemize}
+\item $\hat{F}$ empirical distribution
+\item F(y;$\psi$) parametric model with parameter $\psi$
+\item 
+\end{itemize}
+\item Topics to explore/look-up
+\begin{itemize}
+\item conditions under which bootstrap is consistent (Bickel and
+    Freedman 1981)
+\item Edgeworth correction
+\item Edgeworth expansion
+\item permutation tests
+\end{itemize}
+\end{itemize}
+\end{itemize}
+\subsection{Bootstraps for Parametric Likelihood Inference}
+\label{sec-2-3}
+
+
+\begin{itemize}
+\item profile log-likelihood l$_p$($\gamma$)
+\item ratio statistic $w_p(\gamma) = 2(l_p(\hat{\gamma})-l_p(\gamma)) \sim
+  \chi^2_1 + O(n^{-1})$
+\item signed root likelihood ratio statistic $$r_p =
+  sgn(\hat{\gamma}-\gamma)w_p(\gamma)^{1/2} \sim N(0,1) +
+  O(n^{-1/2})$$
+\item r$_a$ adjusted r$_p$
+\end{itemize}
+\subsubsection{Example 1 Exponential Regression}
+\label{sec-2-3-1}
+
+Lawless(1982)
+
+
+\begin{center}
+\begin{tabular}{rr}
+ Survival in weeks  &  log wbc  \\
+\hline
+               156  &     2.88  \\
+               108  &     4.02  \\
+               143  &     3.85  \\
+                56  &     3.97  \\
+                 1  &      5.0  \\
+\hline
+\end{tabular}
+\end{center}
+\subsection{Weighted Non-parametric Bootstrapping}
+\label{sec-2-4}
+\subsection{Subsampling and the m out of n bootstrap}
+\label{sec-2-5}
+\subsection{Bootstrapping Superefficient estimators}
+\label{sec-2-6}
+\subsection{More on Significance Tests}
+\label{sec-2-7}
+\subsection{Bagging and Classification}
+\label{sec-2-8}
+\subsection{Bootstrapping Dependent Data}
+\label{sec-2-9}
+\subsection{Other topics}
+\label{sec-2-10}
+\subsection{Final Remarks}
+\label{sec-2-11}
+\section{Future Directions}
+\label{sec-3}
 
 \end{document}
