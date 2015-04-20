@@ -1,0 +1,243 @@
+#+TITLE: Recent Developments 
+#+AUTHOR: Nooreen Dabbish, Daqian Huang, and Shinjini Nandi
+#+LATEX_HEADER: \usepackage{tikz,pgfplots,pgfplotstable, amsmath, xspace,geometry,subcaption}
+#+LATEX_HEADER: \usetikzlibrary{shapes}
+#+LATEX_HEADER: \newcommand{\A}{\ensuremath{\mathcal{A}}\xspace}\newcommand{\B}{\ensuremath{\mathcal{B}}\xspace}\newcommand\pa[1]{\ensuremath{\left(#1\right)}}
+#+KEYWORDS: Weighted Bootstrap, Subsampling, M out of N, Bagging
+#+startup: beamer
+#+LaTeX_CLASS: beamer
+#+LaTeX_CLASS_OPTIONS: [bigger]
+#+BEAMER_FRAME_LEVEL: 3
+
+* Bagging and Classification
+
+** Classification Background
+
+*** Our two-predictor dataset
+
+#+begin_latex
+\pgfmathsetseed{1138} % set the random seed
+\pgfplotstableset{ % Define the equations for x and y
+    create on use/x/.style={create col/expr={5.5+2.4*rand}},
+    create on use/y/.style={create col/expr={5+1.5*rand}}
+}
+% create a new table with 30 rows and columns x and y:
+\pgfplotstablenew[columns={x,y}]{30}\testtable
+\pgfplotstableset{ % Define the equations for x and y
+    create on use/x/.style={create col/expr={1.5+rand}},
+    create on use/y/.style={create col/expr={2+1.3*rand}}
+}
+% create a new table with 30 rows and columns x and y:
+\pgfplotstablenew[columns={x,y}]{30}\testtabletwo
+\pgfplotstableset{ % Define the equations for x and y
+    create on use/x/.style={create col/expr={2.5+rand}},
+    create on use/y/.style={create col/expr={6+3*rand}}
+}
+% create a new table with 30 rows and columns x and y:
+\pgfplotstablenew[columns={x,y}]{30}\testtablethree
+
+\begin{tikzpicture}
+\begin{axis}[
+xlabel=Predictor A, % label x axis
+ylabel=Predictor B, % label y axis
+axis lines=left, %set the position of the axes
+xmin=0, xmax=10, % set the min and max values of the x-axis
+ymin=0, ymax=10, % set the min and max values of the y-axis
+clip=false
+]
+
+\addplot [only marks, mark=star, green!30!black] table {\testtable};
+\addplot [only marks, mark=diamond, blue] table {\testtabletwo};
+\addplot [only marks, mark=square*, red] table {\testtablethree};
+
+\end{axis}
+
+\end{tikzpicture}
+#+end_latex
+
+*** A classification scheme
+#+begin_latex
+\begin{figure}
+\begin{subfigure}{.475\textwidth}
+\begin{tikzpicture}[
+    thick, scale = 0.4,
+    >=stealth',
+    dot/.style = {
+      draw,
+      circle,
+      inner sep = 0pt,
+      minimum size = 4pt
+    }
+  ]
+  \coordinate (O) at (0,0);
+  \draw[-] (-0.3,0) -- (10.3,0) coordinate[label = {below:Predictor A}] (xmax);
+  \draw[-] (0,-0.3) -- (0,10.3) coordinate[label = {above:Predictor B}] (ymax);
+  \draw[-] (-0.3,10) -- (10.3,10);
+  \draw[-] (10,-0.3) -- (10,10.3);
+      	%ticks
+    	\foreach \x in {0,...,7}
+     		\draw (\x,1pt) -- (\x,-3pt)
+			node[anchor=north] {\x};
+    	\foreach \y in {0,...,10}
+     		\draw (1pt,\y) -- (-3pt,\y) 
+     			node[anchor=east] {\y};
+        \foreach \x in {0,...,10}
+     		\draw (\x,9.9) -- (\x,10.1);
+    	\foreach \y in {0,...,10}
+     		\draw (9.9,\y) -- (10.1,\y);
+  
+  \draw[-,red] (4.0,0) -- (4.0,10);
+\draw[-,blue] (0,2.5) -- (4, 2.5);
+  
+  \node[green!30!black] at (7,5) {Class 1};
+  \node[blue] at (1.5,1.5) {Class 2};
+  \node[red] at (1.5,6) {Class 3};
+\end{tikzpicture}
+\end{subfigure}
+\begin{subfigure}{0.475\textwidth}
+\begin{tikzpicture}
+[-,thick]
+\node {A >= 4}
+  [sibling distance=2.5cm]
+ child {node {B < 2.5}
+    [sibling distance=2cm]
+    child {node {Class 3}}
+    child {node {Class 2}}
+  } 
+ child {node {Class 1}
+   };
+ \end{tikzpicture}
+\end{subfigure}
+\end{figure}
+
+#+end_latex
+
++ Classification and Regression Tree (CART) method of Breiman et al.
+  (1984)
++ Starts with initial dataset and finds split value to minimize SSE
+
+*** Glass dataset: introduction
+
++ One of the datasets analyzed in Breiman (1996)
++ UCI Machine Learning repository
+
+
+from help(Glass)
+
+Description:
+
+     A data frame with 214 observation containing examples of the
+     chemical analysis of 7 different types of glass. The problem is to
+     forecast the type of class on basis of the chemical analysis.  The
+     study of classification of types of glass was motivated by
+     criminological investigation.  At the scene of the crime, the
+     glass left can be used as evidence (if it is correctly
+     identified!).
+
+
+#+end_latex
+
+*** Glass dataset: preliminary analysis
+
+[[./glassDensityPlots.pdf]]
+
+*** Glass dataset: single classification tree
+
+[[./onetree.pdf]]
+
+*** Different Learning Sets Create Different Trees
+
+[[./diffTrees.pdf]]
+
+** Bagging basics
+
+*** Bagging definition
+
+**** "bagging" bootstrap aggregation
+
+uses resampling as a smoothing device
+ - prediction and nonparametric classification problems
+ - useful when basic algorithm is unstable after small data perturbations
+
+**** Notation
+
++ data $d = \{(x_j,y_j),j=1,\ldots,n\}$
++ response $y$ numerical or class
++ predictor $x\equiv (x^{(1)},\ldots,x^{(p)})$
++ predictor formula $m_0(x|d_n)$
+
+*** Bagging overview
+
++ empirical bagged predictor, acts as asmoother which reduces
+  variance.
+
+- can reduce MSE of predictor by 50%
+
+- bagging by voting: pick the class which is choosen most often in R
+  resamples
+
+- "boosting" attaches weights to the data according to difficulty clasifying.
+
+*** Bagging schematic 
+
+1. Resample the data: $d \rightarrow d^{\star}_1,\ldots,d^{\star}_R$
+2. Construct predictors: $m_0(x|d^{\star}_1),\ldots,m_0(x|d^{\star}_R)$
+3. Bagged predictor is an average: $$\hat{m}_B(x|d) = \frac{1}{R}
+   \sum_{r=1}^{R}m_0(x|d^{\star}_r)$$
+
+Approximates $m_B(x|d) = E^{\star}\{m_0(x|D^{\star})\}$.
+
+** Bagging in action
+*** Classification scheme stability (Breiman 1994)
+
+ #+NAME: Classification scheme stability (Breiman 1994)
+| Stable            | Unstable                              |
+|-------------------+---------------------------------------|
+| k-nearest neighor | Neural nets                           |
+|                   | Classification trees                  |
+|                   | Regression trees                      |
+|                   | Subset selection in linear regression |
+|-------------------+---------------------------------------|
+
++ Bagging is useful in unstable cases
++ Typical number of bootstrap replicates is \sim 50
+
+*** Cross-Validation (Petersen et al. 2008)
+
+[[./PetersenFig1.png]]
+
+*** Misclassification rate reduction with bagged classification trees (Breiman 1996)
+[[./Btable1.png]]
+Breiman1996
+
+*** Screening of predictor variables
+
+**** Hard thresholding example
++ linear regression formula with screening of predictor variables
+$$m_0(x|d) = \sum_{i=1}^{p} \hat{\beta_i}
+I(|\hat{\beta_i}|>c_i)x^{(i)}$$
+
+**** Bagged predictor does "soft thresholding."
+$$m_B(x|d_n) = \sum_{i=1}^{p} E^{\star}\{\hat{\beta^{\star}_i} I(|\hat{\beta^{\star}_i}|>c_i)\}x^{(i)}$$
+
+*** Buhlmann and Yu (2002)
++ Bagged indicator example shows how bagging converts a
+  hardthresholding desicion to softthresholding (smoothens)
+
+[[./BuhlmannYuFig1.png]]
+
+** Conclusions
+*** Advantages of Bagging
++ Bagging is useful for unstable predictors
+  - aggregation reduces variance and makes predictions more stable
++ Useful for high-dimensional case
+  - also shown to be successful in smaller problems (Buja and
+    Stuetzle 2000)
++ Out-of-bag: use samples that were not selected by bootstrap to
+   measure predictive performance
+*** Bagging Pitfalls
+ - Less interpretable than single model
+ - Poor classification predictors can become worse (Breiman 1996)
+ - Increase computational complexity/demand
+ 
+** Questions?

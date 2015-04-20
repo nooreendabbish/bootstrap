@@ -1,0 +1,82 @@
+#+TITLE: Recent Developments
+#+AUTHOR: Daqian Huang, Shinjini Nandi, Nooreen Dabbish
+#+DATE:  2015-04-22 Wed
+#+KEYWORDS: Weighted Bootstrap, Subsampling, M out of N, Bagging
+#+startup: beamer
+#+LaTeX_CLASS: beamer
+#+LaTeX_CLASS_OPTIONS: [bigger]
+#+BEAMER_FRAME_LEVEL: 2
+
+
+* Introduction 
+** Basic Ideas: Bootstrap approaches to confiendence intervals and hypothesis testing
+ 
+ + Nonparametric confidence intervals
+  - either Studentized pivots or direct use of quantiles
+  - Studentized bootstrap uses estimated var V^{\star} are second-order accurace 1-\alpha+O(n^{-1})
+  - improvement over O(n^{-1/2})
+  - BC_a also second-order but additionally tranformation-invariant.
+  
++ Using a pivot
+  - avoids the need to modify the samping plan in hypothesis testing
+
++ Model-based bootstrapping
+  - when data are not identically distributed.
+  - time-series/autoregressive moving average
+
+ + Notes on Notation:
+  - $\hat{F}$ empirical distribution
+  - F(y;\psi) parametric model with parameter \psi
+  - 
+
+ + Topics to explore/look-up
+  - conditions under which bootstrap is consistent (Bickel and
+    Freedman 1981)
+  - Edgeworth correction
+  - Edgeworth expansion
+  - permutation tests
+
+** Bootstraps for Parametric Likelihood Inference
+
+- profile log-likelihood l_p(\gamma)
+
+- ratio statistic $w_p(\gamma) = 2(l_p(\hat{\gamma})-l_p(\gamma)) \sim
+  \chi^2_1 + O(n^{-1})$
+
+- signed root likelihood ratio statistic $$r_p =
+  sgn(\hat{\gamma}-\gamma)w_p(\gamma)^{1/2} \sim N(0,1) +
+  O(n^{-1/2})$$
+
+- r_a adjusted r_p
+
+*** Example 1 Exponential Regression
+Lawless(1982)
+
+| Survival in weeks | log wbc      |
+|-------------------+--------------|
+|               156 |         2.88 |
+|               108 |         4.02 |
+|               143 |         3.85 |
+|                56 |         3.97 |
+|                 1 |          5.0 |
+|-------------------+--------------|
+
+
+
+** Weighted Non-parametric Bootstrapping
+
+** Subsampling and the m out of n bootstrap
+
+** Bootstrapping Superefficient estimators
+
+** More on Significance Tests
+
+** Bagging and Classification
+
+** Bootstrapping Dependent Data
+
+** Other topics
+
+** Final Remarks
+
+* Future Directions
