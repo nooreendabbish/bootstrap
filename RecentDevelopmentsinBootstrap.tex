@@ -1,0 +1,171 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage{amsmath,graphicx,float}
+\usepackage{indentfirst,listings}
+\usepackage[top=1in,bottom=1in,left=1in,right=1in]{geometry}
+\geometry{left=1.5cm,right=2.0cm,top=2.5cm,bottom=2.5cm}
+\setlength{\parindent}{2em}
+\makeatletter
+\newcommand{\rmnum}[1]{\romannumeral #1}
+\newcommand{\Rmnum}[1]{\expandafter\@slowromancap\romannumeral #1@}
+\newcommand{\distas}[1]{\mathbin{\overset{#1}{\kern\z@\sim}}}%
+\makeatother
+
+\begin{document}
+
+\title{Recent Developments in Bootstrap Methodology}
+\author{ Part4 Weighted nonparametric Bootstrapping \\ Huang, Daqian}
+\date{}
+\maketitle
+
+Outline \\
+\begin{enumerate}
+\item Several definitions
+\item Why use weighted Nonparametric Bootstrapping
+\item How it works
+\item One Example
+\end{enumerate}
+
+\begin{enumerate}
+\item Several definitions
+  \begin{enumerate}
+  \item Kullback-Leibler distance [2]\\
+  The Kullback-Leibler distance is perhaps the most frequently used information-theoretic "distance" measure from a viewpoint of theory. \\
+  Here is the definition: If $ p_0 $, $ p_1 $ are two probability densities, the Kullback-leibler distance is defined to be 
+  $$ D(p_1 || p_0) =\int p_1(x) log \dfrac{p_1(x)}{p_0(x)} dx $$
+  
+  \item Prepivoting [3] \\
+  Let Y be a sample drawn from a distribution F,\\
+  Let $ y_n $ be a sample of size n, which drawn from an unknown distribution F. \\
+  $ R_n (\theta)= R_n (y_n, \theta ) $ be a pivot, a function of $ \theta $ and of the sample whose distribution is known. \\
+  Let $ c_n (\alpha) $ denote the largest $ (1- \alpha ) $ th quantile of the distribution of $ R_n $. \\
+  Suppose $ A $ is the set of all possible values of the parameter $ \theta $. Then $$ \{ t \in A : R_n(t) \le c_n (\alpha) \} $$ is a confidence set of level $ 1- \alpha $ for $ \theta $. \\  \\
+  Example:\\ \\
+  $ (y_1, y_2, ..., y_n )=y_n $ with unknown parameter $ \theta $  \\ \\
+  
+  $ R_n (\theta)= R_n (y_n, \theta ) = \dfrac{\bar{y_n}-\theta}{S/\sqrt{n}} \sim t_{n-1}  $ \\  \\
+         
+  Let $ H_n = H_n (., F ) $ be the CDF of the root $ R_n (\theta) $, then $ H_n = H_n (., F ) $ is uniform. \\ \\ \\
+  
+   $$ (y_1^1, y_2^1, ..., y_n^1 )=y_n^1  \qquad \hat{\theta_1} $$
+   $$ (y_1^2, y_2^2, ..., y_n^2 )=y_n^2 \qquad \hat{\theta_2} $$
+   $$  ...... $$
+   $$ (y_1^B, y_2^B, ..., y_n^B )=y_n^B \qquad \hat{\theta_B} $$
+
+   
+  As n increases, $ H_n $ converges weakly to a limit CDF $ H=H(., F) $. 
+  Let $ \hat{F_n} $ be a consistent estimate of F. Then a natural estimate of H is $ \hat{H} = \hat{H}(., \hat{F}_n ) $. \\  
+  The root $ R_n(\theta)$ was transformed into $$ R_{n,1}(\theta) = \hat{H}_n \{ R_n(\theta) \}  $$ 
+  The mapping of $ R_n $ into $ R_{n,1} $ by the estimated cumulative distribution function of the former is therefore called prepivoting. \\
+  In fact it has been shown that the distribution of prepivoting algorithm is less dependent on F than is that of $ H=H(., F) $, thus providing a better pivot. \\
+  Then, an asymptotic confidence set for $ \theta $ based upon the root $ R_n $ is $$ \{ t \in A : \hat{ H } \{R_n(t) \} \le 1-\alpha \} $$ Equivalently, 
+  $$ \{ t \in A : R_n(t)  \le \hat{ H }^{-1} (1-\alpha) \} $$
+  \end{enumerate}
+  
+  
+\item Why use weighted Nonparametric Bootstrapping\\
+As we all know, the ordinary nonparametric bootstrap uses uniform resampling from original data sample to simulate bootstrap sample. A merit of these way is that we can obtain a generally reliable nonparametric confidence intervals. There are two approaches. The first method is called studentized bootstrap. This is inspired by the student t statistic and requires an estimate variance $ V^* $ for $ \hat{\theta}^* $ based on the same bootstrap sample. Then using Edgeworth expansion, a wide class of estimators $ \hat{\theta} $ will be derived from the quantiles of $ Z^* = (\hat{\theta}^* -\hat{\theta} )/V^{*1/2} $. The second approach is that resampling of $ \hat{\theta}^* $ conditional on $ \hat{\theta} $ is used to approximate sampling from the posterior distribution of $\theta $ given $\hat{\theta} $. This interval is known as bisas-corrected and accelerated $(BC_a)$ interval.\\
+But numerical work has shown that both studentized bootstrap and $ BC_a $ intervals typically show slight undercoverage since occasional instability in the variance estimate V can lead to excessively long intervals. \\
+In order to avoiding this undercoverage, the process of prepivoting was come out by Beran (1987, 1988). \\
+The main idea is that resampling from a nonuniform distribution $ \widetilde{F}_0 $ with the constraint that $ \theta(\widetilde{F}_0 ) = \theta_0 $.  \\
+\item How it works \\
+Suppose that there is an unknown distribution F and one parameter of interest $ \theta $. We want to estimate F nonparametrically under the constraint $ \theta(F) =\theta_0 $, where $ \theta_0 $ may not be the true value of $ \theta $. $ Y_i $ is the original data coming from F. Then given $ \theta_0 $ and a data set Y, we use arbitrary probability $ p= ( p_1, p_2, ...., p_n ) $, where $ \sum_i ^n p_i=1 $, to weight $ Y_i $. Next, we choose $ p=p(\theta_0) $ to minimize the Kullback-Leibler distance between $ \hat{F}_p $ and $ \hat{F} $,
+$$ \int log\dfrac{d \hat{F_p} }{d \hat{F}} d \widetilde{F}(x) = -\dfrac{1}{n} \sum_{j=1}^n log(n p_j) $$ with constraint $ \theta(\hat{F_p})= \theta_0 $ . \\
+Here is a theorem [5] for solving this $ p_i(\theta) $. \\
+Theorem 1 For $ \mu \in ( y_{(1)}, y_{(n)}) $ ,
+$$ p_i(u)=\dfrac{1}{n- \lambda (y_i - \mu )} >0 , \qquad 1\le i \le n , $$
+where $ \lambda $ is the unique solution of the equation $$ \sum_{j=1}^n \dfrac{y_j - \mu}{n- \lambda (x_j - \mu)}=0 $$ in the interval $(\dfrac{n}{x_{(1)}-\mu}, \dfrac{n}{x_{(n)}-\mu} )$.
+
+When we get $ p_i $, we can use this $ \hat{F}_p $ as resampling distribution to do weighted bootstrap. Let $ Y^{\dagger} $ be the bootstrap sample from above nonuniform distribution $ \hat{F}_p $. \\
+
+By using prepivoting method, we construct an approximately uniform random variable $ U= u(Y,\theta) $ , a transforming function on (0, 1). Such that a one-side confidence set for $ \theta $ is $ \{ \theta: u(Y, \theta) \le 1- \alpha \} $.  According to the percentile method, $ u(Y,\theta)= Pr^*( \hat{\theta}^* > \theta ) $, where the asterisk indicates uniform bootstrapping from Y. On the other hand, based on normal approximation, a confidence set of asymptotic coverage $ 1- \alpha $ can be defined by $ u(Y,\theta)= \Phi \{ (\hat{\theta} -\theta) / V^{1/2}  \} $ . \\
+
+The uniform bootstrap estimates the distribution function $ G (x| \theta) $ of $ u(Y, \theta) $ by $$ \hat{G}(x) =Pr^* \{ u(Y^* , \theta) \le x \} $$ from which we can define the prepivoted root $ \hat{u}_1 (Y, \theta) = \hat{G} \{ u(Y, \theta) \} $. \\
+Similarly, the weighted bootstrap estimates the distribution function by $$ \hat{G}(x) =Pr^{\dagger} \{ u(Y^{\dagger} , \theta) \le x \} $$ from which we can define the prepivoted root $ \widetilde{u}_1 (Y, \theta) = \widetilde{G} \{ u(Y^{\dagger}, \theta) \} $. \\
+
+\begin{center}
+    \begin{tabular}{c | c | c} \hline
+    Method & formula & reduced error by\\
+    \hline
+    uniform & $ Pr \{ u(Y, \theta) \le \mu \} =\mu + O(n^{-j/2})$ & 1 \\
+    \hline
+    uniform bootstrap & $ Pr \{ u(Y^*, \theta) \le \mu \} =\mu + O(n^{-(j+1)/2})$ & $ O(n^{-1/2}) $ \\
+    \hline
+    weighted bootstrap & $ Pr \{ u(Y^{\dagger}, \theta) \le \mu \} =\mu + O(n^{-(j+2)/2})$ & $ O(n^{-1}) $ \\
+    \hline
+    \end{tabular}
+    \end{center}
+
+Lee and Young showed that this conclusion applies to regression settings and robust inference, as well as to more conventional problems within the smooth function model. Compared to conventional bootstrapping, weighted bootstrap prepivoting accelerates the rate of convergence of the error of the bootstrap inference. 
+\item One Example \\ 
+By R demo. \\  \\  \\  \\  \\
+
+
+\end{enumerate}
+
+ 
+
+
+Part 4 conclusion: \\
+\begin{enumerate}
+\item Why do we need weighted nonparametric bootstrapping? \\
+As we all know, the ordinary nonparametric bootstrap uses uniform resampling from original data sample to simulate bootstrap sample. A merit of these way is that we can obtain a generally reliable nonparametric confidence intervals. There are two approaches. The first method is called studentized bootstrap. This is inspired by the student t statistic and requires an estimate variance $ V^* $ for $ \hat{\theta}^* $ based on the same bootstrap sample. Then using Edgeworth expansion, a wide class of estimators $ \hat{\theta} $ will be derived from the quantiles of $ Z^* = (\hat{\theta}^* -\hat{\theta} )/V^{*1/2} $. The second approach is that resampling of $ \hat{\theta}^* $ conditional on $ \hat{\theta} $ is used to approximate sampling from the posterior distribution of $\theta $ given $\hat{\theta} $. This interval is known as bisas-corrected and accelerated $(BC_a)$ interval.\\
+But numerical work has shown that both studentized bootstrap and $ BC_a $ intervals typically show slight undercoverage since occasional instability in the variance estimate V can lead to excessively long intervals. \\
+In order to avoiding this undercoverage, the process of prepivoting was come out by Beran (1987, 1988). \\
+The main idea is that resampling from a nonuniform distribution $ \widetilde{F}_0 $ with the constraint that $ \theta(\widetilde{F}_0 ) = \theta_0 $.  \\
+
+\item How does weighted nonparametric bootstrapping work? \\
+Suppose that there is an unknown distribution F and one parameter of interest $ \theta $. We want to estimate F nonparametrically under the constraint $ \theta(F) =\theta_0 $, where $ \theta_0 $ may not be the true value of $ \theta $. $ Y_i $ is the original data coming from F. Then given $ \theta_0 $ and a data set Y, we use arbitrary probability $ p= ( p_1, p_2, ...., p_n ) $, where $ \sum_i ^n p_i=1 $, to weight $ Y_i $. Next, we choose $ p=p(\theta_0) $ to minimize the Kullback-Leibler distance between $ \hat{F}_p $ and $ \hat{F} $,
+$$ \int log\dfrac{d \hat{F_p} }{d \hat{F}} d \widetilde{F}(x) = -\dfrac{1}{n} \sum_{j=1}^n log(n p_j) $$ with constraint $ \theta(\hat{F_p})= \theta_0 $ . \\
+Here is a theorem [5] for solving this $ p_i(\theta) $. \\
+Theorem 1 For $ \mu \in ( y_{(1)}, y_{(n)}) $ ,
+$$ p_i(u)=\dfrac{1}{n- \lambda (y_i - \mu )} >0 , \qquad 1\le i \le n , $$
+where $ \lambda $ is the unique solution of the equation $$ \sum_{j=1}^n \dfrac{y_j - \mu}{n- \lambda (x_j - \mu)}=0 $$ in the interval $(\dfrac{n}{x_{(1)}-\mu}, \dfrac{n}{x_{(n)}-\mu} )$.
+
+When we get $ p_i $, we can use this $ \hat{F}_p $ as resampling distribution to do weighted bootstrap. Let $ Y^{\dagger} $ be the bootstrap sample from above nonuniform distribution $ \hat{F}_p $. \\
+
+By using prepivoting method, we construct an approximately uniform random variable $ U= u(Y,\theta) $ , a transforming function on (0, 1). Such that a one-side confidence set for $ \theta $ is $ \{ \theta: u(Y, \theta) \le 1- \alpha \} $.  According to the percentile method, $ u(Y,\theta)= Pr^*( \hat{\theta}^* > \theta ) $, where the asterisk indicates uniform bootstrapping from Y. On the other hand, based on normal approximation, a confidence set of asymptotic coverage $ 1- \alpha $ can be defined by $ u(Y,\theta)= \Phi \{ (\hat{\theta} -\theta) / V^{1/2}  \} $ . \\
+
+The uniform bootstrap estimates the distribution function $ G (x| \theta) $ of $ u(Y, \theta) $ by $$ \hat{G}(x) =Pr^* \{ u(Y^* , \theta) \le x \} $$ from which we can define the prepivoted root $ \hat{u}_1 (Y, \theta) = \hat{G} \{ u(Y, \theta) \} $. \\
+Similarly, the weighted bootstrap estimates the distribution function by $$ \hat{G}(x) =Pr^{\dagger} \{ u(Y^{\dagger} , \theta) \le x \} $$ from which we can define the prepivoted root $ \widetilde{u}_1 (Y, \theta) = \widetilde{G} \{ u(Y^{\dagger}, \theta) \} $. \\
+
+\begin{center}
+    \begin{tabular}{c | c | c} \hline
+    Method & formula & reduced error by\\
+    \hline
+    uniform & $ Pr \{ u(Y, \theta) \le \mu \} =\mu + O(n^{-j/2})$ & 1 \\
+    \hline
+    uniform bootstrap & $ Pr \{ u(Y^*, \theta) \le \mu \} =\mu + O(n^{-(j+1)/2})$ & $ O(n^{-1/2}) $ \\
+    \hline
+    weighted bootstrap & $ Pr \{ u(Y^{\dagger}, \theta) \le \mu \} =\mu + O(n^{-(j+2)/2})$ & $ O(n^{-1}) $ \\
+    \hline
+    \end{tabular}
+    \end{center}
+
+Lee and Young showed that this conclusion applies to regression settings and robust inference, as well as to more conventional problems within the smooth function model. Compared to conventional bootstrapping, weighted bootstrap prepivoting accelerates the rate of convergence of the error of the bootstrap inference. 
+
+\item Expectation\\
+Even though weighted bootstrap have above merits, it still not easily solve a set of parameters or null hypotheses.
+
+\end{enumerate}
+
+
+
+Questions:\\
+The R code for weighted bootstrap part still has some problem when I was trying to figure out each weight. So, if your guys have some spare time, could you do me a favor on checking the code? 
+
+ 
+\begin{center}
+References
+\end{center}
+
+[1] LEE, S. M. S. and YOUNG, G. A. (2003). Prepivoting by weighted bootstrap iteration. Biometrika 90 393-410\\  
+
+[2] Don H. Johnson and Sinan Sinanovic. Symmetrizing the Kullback-Leibler distance.  \\
+
+[3] BERAN, R. J. (1987). Prepivoting to reduce level error of confi- dence sets. Biometrika 74 457-468. \\
+
+[4] A. C. Davison, D. V. Hinkley and G. A. Young (2003) Recent Developments in Bootstrap Methodology. Statistical Science, Vol. 18, 141-157.
+
+[5] http://www.ltcc.ac.uk/courses/Empirical\%20Likelihood/Empirical\%20Likelihood\%20notes.pdf
+
+\end{document}

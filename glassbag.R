@@ -136,7 +136,7 @@ dev.off()
 library(rpart)
 Serror <- function(learndata, testdata) {
 
-glass.tree <- rpart( Type ~.,
+glass.tree <- rpart(Type ~.,
                     data = learndata, method="class",
                     control = rpart.control(xval = 10))
 pred <- predict(glass.tree, testdata)
@@ -171,17 +171,15 @@ baggederrors <- numeric(100)
 return (classErrors)
 }
 
-singleandbag(Glass)
-#Results obtained 0.4845   0.2585
-#Reduction of 46.7%
-
+singleandbag(Glass)(
 #4/20 Obtained 0.4815 0.2935
-#Reduction of 39.0%
+#Reduction of 39.04%
 
 
-singleandbag(ssGlass)
-##Results obtained 0.2915 0.2880
-##Reduction of 1.2%
+#on spatial sign transformed data
+singleandbag(ssGlass) 
+##Results obtained 0.3135 0.3005
+##Reduction of 4.15%
 
 
 

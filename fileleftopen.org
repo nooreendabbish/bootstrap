@@ -1,0 +1,457 @@
+#+TITLE: Recent Developments 
+#+AUTHOR: Nooreen Dabbish, Daqian Huang, and Shinjini Nandi
+#+OPTIONS: toc:nil
+#+LATEX_HEADER: \usepackage{tikz,pgfplots,pgfplotstable, amsmath, xspace,geometry}
+#+LATEX_HEADER: \usetikzlibrary{shapes}
+#+LATEX_HEADER: \newcommand{\A}{\ensuremath{\mathcal{A}}\xspace}\newcommand{\B}{\ensuremath{\mathcal{B}}\xspace}\newcommand\pa[1]{\ensuremath{\left(#1\right)}}
+#+KEYWORDS: Weighted Bootstrap, Subsampling, M out of N, Bagging
+#+startup: beamer
+#+LaTeX_CLASS: beamer
+#+LaTeX_CLASS_OPTIONS: [bigger]
+#+BEAMER_FRAME_LEVEL: 4
+
+\begin{abstract}
+
+\end{abstract}
+
+* Recent Developments in Bootstrap Methodology
+** Introduction
+ 
+This article sets out to "give a bird's eye overview of the current
+state of bootstrap research." The authors cover basic ideas with
+references to bootstrap literature as well as giving in-depth
+explanation and examples of extensions. Topics include parametric
+inference using bootstrap stimulations, non-uniform nonparametric
+sampling, bootstrap failure, hypothesis testing, bagging, dependent
+data and other topics. Our goal is to summarize and highlight the
+examples and ideas in the paper. We place special emphasis on weighted
+non-parametric bootstrapping, subsampling and m out of n, and bagging
+and classification. We conclude with a section on
+future directions suggesting what next steps can take this work further.
+
+** Basic Ideas: Bootstrap approaches to confidence intervals and hypothesis testing
+ 
+ The authors summarize several basic concepts including the empirical
+ distributions ($\hat{F}$), nonparameteric (F or estimate $\tilde{F}$)
+and parametric (F(y;\psi)) notation. In an overview of Bootstrap
+approaches 
+to confidence intervals and hypothesis testings, the authors describe
+how 
+non parametric CIs may
+be obtained, either through Studentized pivots or the direct use of
+bootstrap quantiles.
+
+#+NAME: Table 1
+|---------------------------------------+---------------+----------------+
+| Confidence interval method            | Accuracy      | Note           |
+|---------------------------------------+---------------+----------------+
+| Bootstrap quantiles                   | O(1/\sqrt{n}) |                |
+| Studentized bootstrap                 | O(1/n)        |                |
+| Bias-corrected and accelerated (BC_a) | O(1/n)        | Intervals are  |
+|                                       |               | transformation |
+|                                       |               | invariant.     |
+|---------------------------------------+---------------+----------------+
+
+As summarized in Table 1, Studentized pivots that use the bootstrap
+estimated variance, V^{\star} can be constructed. An Edgeworth
+expansion (similar to a Taylor series, but of a probability density
+function) is used to demonstrate the bootstrapped pivots are
+consistent estimators for "smooth" estimators. They are accurate to 1-\alpha + O(1/n), an
+improvement of 1/\sqrt{n}.
+
+The authors explain that using a pivot is beneficial because it 
+avoids the need to modify the samping plan in hypothesis testing.
+They further describe model-based bootstrapping when data are not
+identically distributed for example time-series/autoregressive moving average.
+
+** Bootstraps for Parametric Likelihood Inference
+
+In a section explaining bootstrap's use for parametric likelihood
+inference, the authors compare confidence set coverage calculations 
+for an exponential regression problem. They use the N(0,1)
+distribution of the signed root likelihood ratio statistic, r_p, and
+find that it is not as accurate as the N(0,1) distributed of the
+adjusted signed root r_a or parametric bootstrap confidence sets. While the
+adjusted r_a calculation requires the use of an ancillary statistic,
+the authors point out that the bootstrap does not neccessitate this
+additional analytic step.
+ 
+In a second example of normal distributions with common mean,
+different variances, r_a is intractable. The authors show that for a
+six sample data set of cotton yarn, it possible to use MLE or
+Constrained MLE bootstrap to attain near-nominal coverages for
+confidence sets.
+
+** Weighted Non-parametric Bootstrapping
+
+
+
+** Subsampling and the m out of n bootstrap
+
+
+** Bootstrapping Superefficient estimators
+
+*** Consistency  of convential bootstrap depends on true value of \theta
+
++ Beran (1997)
+
+*** Stein estimator
+
++ prototypical of many nonparametric smoothers
+
++ $Y_1, \ldots, Y_n \overset{iid}{\sim} N_k(\theta,I)$
+
+$$T = \left( 1 - \frac{k-2}{n||\bar{Y}||^2}\right)\bar{Y}$$
+
+*** Example 4 (Stein Estimator)
+
+*** Fig. 1  Empirical Coverages of Confidence Sets in the Stein Estimator Example
+
+** More on Significance Tests
+
++ nonparametric model fit tests, comparing to parametric model fits
+  or fits from several data sets
+
++ ESP: Empirical strength probability, with H_0: \theta \in \Theta_0,
+ESP = proportion of $\tilde{\theta^{\star}_r} \in \Theta_0$.
+
+ESP acts like a p-value asymptoticall as n\rightarrow \infty.
+
+
+*** Example 5 Exponential Mean
+
++ Y_i independent \sim exp(\mu}
++ H_0: \mu \leq \mu_o, H_1: \mu > \mu_0
++ exact test has a p \sim U
+
++ Parametric bootstrap does not work well for small sample,
+  nonparametric works well.
+
+*** Example 6 Poisson Dispersion
+
++ test for Poisson Dispersion or overdispersion: Y_1,\ldots,Y_n iid (\mu,\sigma^2),
+  H_0:\theta=\mu/sigma^2 \geq 1, H_1: \theta < 1.
+
+*** Point null hypothesis, Distribution testing
+
++ point null define a confidence set for \theta.
++ To test a specific distribution, define distance between
+  distributions and use d($\tilde{F}$,F_0)
+
+** Bagging and Classification
+*** Background on classification
+
+**** A two-predictor problem
+
+#+begin_latex
+\pgfmathsetseed{1138} % set the random seed
+\pgfplotstableset{ % Define the equations for x and y
+    create on use/x/.style={create col/expr={5.5+2.4*rand}},
+    create on use/y/.style={create col/expr={5+1.5*rand}}
+}
+% create a new table with 30 rows and columns x and y:
+\pgfplotstablenew[columns={x,y}]{30}\testtable
+\pgfplotstableset{ % Define the equations for x and y
+    create on use/x/.style={create col/expr={1.5+rand}},
+    create on use/y/.style={create col/expr={2+1.3*rand}}
+}
+% create a new table with 30 rows and columns x and y:
+\pgfplotstablenew[columns={x,y}]{30}\testtabletwo
+\pgfplotstableset{ % Define the equations for x and y
+    create on use/x/.style={create col/expr={2.5+rand}},
+    create on use/y/.style={create col/expr={6+3*rand}}
+}
+% create a new table with 30 rows and columns x and y:
+\pgfplotstablenew[columns={x,y}]{30}\testtablethree
+
+\begin{tikzpicture}
+\begin{axis}[
+xlabel=Predictor A, % label x axis
+ylabel=Predictor B, % label y axis
+axis lines=left, %set the position of the axes
+xmin=0, xmax=10, % set the min and max values of the x-axis
+ymin=0, ymax=10, % set the min and max values of the y-axis
+clip=false
+]
+
+\addplot [only marks, mark=star, green!30!black] table {\testtable};
+\addplot [only marks, mark=diamond, blue] table {\testtabletwo};
+\addplot [only marks, mark=square*, red] table {\testtablethree};
+
+\end{axis}
+
+\end{tikzpicture}
+#+end_latex
+
+**** A classification scheme
+#+begin_latex
+\begin{minipage}{.475\textwidth}
+\includegraphics[width=0.5\textwidth]{\begin{tikzpicture}[
+    thick,
+    >=stealth',
+    dot/.style = {
+      draw,
+      circle,
+      inner sep = 0pt,
+      minimum size = 4pt
+    }
+  ]
+  \coordinate (O) at (0,0);
+  \draw[-] (-0.3,0) -- (10.3,0) coordinate[label = {below:Predictor A}] (xmax);
+  \draw[-] (0,-0.3) -- (0,10.3) coordinate[label = {right:Predictor B}] (ymax);
+  \draw[-] (-0.3,10) -- (10.3,10);
+  \draw[-] (10,-0.3) -- (10,10.3);
+      	%ticks
+    	\foreach \x in {0,...,9}
+     		\draw (\x,1pt) -- (\x,-3pt)
+			node[anchor=north] {\x};
+    	\foreach \y in {0,...,10}
+     		\draw (1pt,\y) -- (-3pt,\y) 
+     			node[anchor=east] {\y};
+        \foreach \x in {0,...,10}
+     		\draw (\x,9.9) -- (\x,10.1);
+    	\foreach \y in {0,...,10}
+     		\draw (9.9,\y) -- (10.1,\y);
+  
+  \draw[-,red] (4.0,0) -- (4.0,10);
+  \draw[-,blue] (0,2.5) -- (4, 2.5);
+  
+  \node[green!30!black] at (7,5) {Class 1};
+  \node[blue] at (1.5,1.5) {Class 2};
+  \node[red] at (1.5,6) {Class 3};
+ 
+\end{tikzpicture}
+\end{minipage}
+\begin{minipage}{.475\textwidth}
+\begin{tikzpicture}
+[-,thick]
+\node {A >= 4}
+  [sibling distance=2.5cm]
+ child {node {B < 2.5}
+    [sibling distance=2cm]
+    child {node {Class 3}}
+    child {node {Class 2}}
+  } 
+ child {node {Class 1}
+   };
+ \end{tikzpicture}
+\end{minipage}
+#+end_latex
+
+
+
++ "bagging"--bootstrap aggregation, uses resampling as a smoothing device
+ - prediction and nonparametric classification problems
+ - useful when basic algorithm is unstable after small data perturbations
+
++ empirical bagged predictor, acts as asmoother which reduces
+  variance.
+
++ can reduce MSE of predictor by 50%
+
++ bagging by voting: pick the class which is choosen most often in R
+  resamples
+
++ "boosting" attaches weights to the data according to difficulty clasifying.
+
+** Bootstrapping Dependent Data
+
+** Other topics
+
+** Final Remarks
+
+* Future Directions
+* Bagging notes
+
+** Breiman 1996
+
+ #+NAME: Classification scheme stability (Breiman 1994)
+| Stable            | Unstable                              |
+|-------------------+---------------------------------------|
+| k-nearest neighor | Neural nets                           |
+|                   | Classification trees                  |
+|                   | Regression trees                      |
+|                   | Subset selection in linear regression |
+|-------------------+---------------------------------------|
+
++ Classification tree examples
+
+#+BEGIN_SRC R :session *paper* :tangle yes :export none
+  library(rpart) 
+  glass <- read.csv("glass.data.txt")
+  
+  colnames(glass) <- c("Id","RefIndex","Na","Mg","Al","Si","K","Ca","Ba","Fe","Type")
+  ##Type of glass: (class attribute)
+  #      -- 1 building_windows_float_processed
+  #      -- 2 building_windows_non_float_processed
+  #      -- 3 vehicle_windows_float_processed
+  #      -- 4 vehicle_windows_non_float_processed (none in this database)
+  #      -- 5 containers
+  #      -- 6 tableware
+  #      -- 7 headlamps
+  
+  
+  r01 <- sample(c(0,1), 213, replace=TRUE)
+  
+  
+  glass.L <- glass[r01 == 0,]
+  glass.T <- glass[r01 == 1,]
+  
+  dim(glass.L)
+  dim(glass.T)
+  
+  glass.tree <- rpart(X1.1 ~X0.00.1+X0.00+X8.75+X0.06+X71.78+X1.10+X4.49+X13.64+X1.52101,
+                      data = glass.L, method="class")
+  
+  #
+  
+  plot(glass.tree)
+  text(glass.tree, use.n=TRUE, all=TRUE, cex=.8)
+  ?predict
+  
+  pred <- predict(glass.tree, glass.T)
+  pred
+  pred == glass.T[, ncol(glass.T)]
+  pred
+  
+#+END_SRC
+
+* Notes 
+** Section 2
+ + Notes on Notation:
+  - $\hat{F}$ empirical distribution
+  - F(y;\psi) parametric model with parameter \psi
+  - 
+
+ + Topics to explore/look-up
+  - conditions under which bootstrap is consistent (Bickel and
+    Freedman 1981)
+  - Edgeworth correction
+  - Edgeworth expansion
+  - permutation tests
+
+** Section 3
+- profile log-likelihood l_p(\gamma)
+
+- ratio statistic $w_p(\gamma) = 2(l_p(\hat{\gamma})-l_p(\gamma)) \sim
+  \chi^2_1 + O(n^{-1})$
+
+- signed root likelihood ratio statistic $$r_p =
+  sgn(\hat{\gamma}-\gamma)w_p(\gamma)^{1/2} \sim N(0,1) +
+  O(n^{-1/2})$$
+
+- r_a adjusted r_p $$r_a = r_p + r_p^{-1}\log(u_p/r_p) \sim N(0,1) +
+  O(n^{-3/2})$$ where u_p depends on an ancillary statistic.
+
+*** Example 1 Exponential Regression
+Lawless(1982)
+
+#+tblname: lawless
+| Survival in weeks | log wbc      |
+|-------------------+--------------|
+|               156 |         2.88 |
+|               108 |         4.02 |
+|               143 |         3.85 |
+|                56 |         3.97 |
+|                 1 |          5.0 |
+|-------------------+--------------|
+
++ Exponential regression model: lifetimes T_1,\ldots,T_n,
+  independent, E(T_i) = exp(\beta + \xi z_i)
+
++ want mean lifetime for z_0, parameter of interest \gamma = \beta +
+  \xi z_0
+
++ r_p is exactly pivotal \rightarrow bootstrap yields true sampling
+  distribution, 1-\alpha coverage (opposed to coverage error O(1/n)).
+
+
+
+
+
+
+*** When r_p is not exactly pivotal
+ + can improve errors using constrained estimator
+   $(\gamma,\hat{\xi_\gamma})$, to give r_p^\dag with error rate
+   O(n^{-3/2}).
+
++ Robbins-Monro stochastic search algorithm makes this possible
+  wit a single bootstrap sample for each value \gamma takes on.
+
+
+
+
+
++ strength measurements in six sample of cotton yarn
+
++ used contstrained mle and simple search algorithm
+** Section 4
++ ordinary--uniform resampling
++ null hypothesis sample from $\tilde{F_0}$, constrained by
+  $\theta(\tilde{F_0}) = \theta_0$
+
++ $\hat{F_p}$ distribution that gives prob p_i to Y_i
++ minimize Kullback-Leibler distance
++ resample $\hat{F_p}$ to get $Y^\dag$
+
+*** Example 3: Folded normal mean
+Study to compare the coverage properties of bootstrap confidence
+intervals for mean \mu of folded standard normal.
+
+
+
+- Things to look up:
+++ How uniform bootstrapping reduces error by O(n^{-1/2})
+
+** Section 5
++ goal is to provide asymptotic consistency when bootstrap fails
++ subsamples calculated without replacement
++ "m out of n bootstrap" size m<n or m<<n
+
+Unless we have some rigid conditions, bootstrap cannot give the
+second-order accuracy. We can get better results asymptotically from
+subsampling. Subsampling theory says that we draw the samples without
+replacement. M out of N says you can draw the subsamples, without
+replacement.  
+
++ Y random sample from F
++ wish to construct confidence set for \theta
++ J(F) non-degenerate limiting distribution
+
+If we find L, the empirical distribution function from the
+subsamples, we can show that it converges to the limiting
+distribution very well.
+
++ time series: subsampling remains valid under strong mixing
+  assumption.
+ So if it is time series, we have to choose a subsample sequentially.
+  Everything holds, but the subsample for example of Y_1, \ldots,
+  Y_10, could have been 1 and 4 then 2, but if it is time series you
+  have to choose them in order. One way to accomplish this is to
+  choose the first element randomly and the remaining items
+  sequentially.
+
++ extra conditions are not required for subsampling
+Bootstrap also gives similar consistency, under stricter conditions.
+It works under weak conditions as well. Under strong conditions,
+using a metric, you can prove bootstrap consistency. These are not
+necessary for subsampling.
+
++ m out of n:  asymptotic validity also true
+m out of n is with replacement, subsampling is without replacement.
+You can perform m out of n when m^2/n \rightarrow 0. If that holds
+true, both methods are the same. Otherwise, subsampling gives better
+results (m out of n will not be asymptotically consistent).
+
++ choice of subsample size
++ level of accuracy
+The authors cite an example of concern about the level of accuracy in
+which the normal approximation is better than subsampling.
+
++ summary
+When the advantages of subsampling are clear, we prefer it out of
+ordinary or m out of n bootstrap. If you are unsure of the validity
+of bootstrap, use subsampling. If m out of n is valid, it is
+preferrable.
+
+
